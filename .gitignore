@@ -1,0 +1,17 @@
+# Node.js / Express
+node_modules/
+package-lock.json
+
+# Environment variables
+.env
+
+# Logs
+logs/
+
+# IDE / Editor specific
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
