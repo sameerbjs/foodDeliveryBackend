@@ -23,6 +23,6 @@ const PORT = process.env.SERVER_PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-const mongoURL = process.env.DB_CONNECT_URL;
+const mongoURL = process.env.DB_CONNECT_URL_CLOUD;
 
 Connection(mongoURL);
