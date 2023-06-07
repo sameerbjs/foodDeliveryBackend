@@ -2,7 +2,7 @@ import express from "express";
 import {
     addNewProduct,
     getProductDetail,
-    getAllPosts,
+    getAllProduct,
     editProduct,
     deleteProduct,
 } from "../controllers/ProductController.js";
@@ -17,7 +17,7 @@ router.post(
     productPicUpload.single("productPic"),
     addNewProduct
 );
-router.get("/get-all", authenticateToken, getAllPosts);
+router.get("/get-all/:id", authenticateToken, getAllProduct);
 router.get("/get-product/:id", authenticateToken, getProductDetail);
 router.post(
     "/edit-product/:id",
