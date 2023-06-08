@@ -54,6 +54,18 @@ export const getAllProduct = async (req, res) => {
     }
 };
 
+
+export const getTotalProductLength = async (req, res) => {
+    try {
+      // Count the total number of items in the collection
+      const totalItems = await Product.countDocuments();
+  
+      res.status(200).send({ message : totalItems });
+    } catch (error) {
+      res.status(500).send({ error: 'Failed to get total items' });
+    }
+};
+
 export const editProduct = async (req, res) => {
     try {
         const { id } = req.params;

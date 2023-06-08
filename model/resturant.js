@@ -35,8 +35,15 @@ const restScheme = mongoose.Schema(
         isUser: {
             type: Boolean,
         },
+        verificationToken: {
+            type: String
+        },
+        isVerified: {
+            type: Boolean,
+        }
+
     },
-    {timestamps: true}
+    { timestamps: true }
 );
 const rest = mongoose.model("resturants", restScheme);
 

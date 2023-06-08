@@ -5,9 +5,10 @@ import {
     getAllProduct,
     editProduct,
     deleteProduct,
+    getTotalProductLength
 } from "../controllers/ProductController.js";
-import {productPicUpload} from "../controllers/ProductImageController.js";
-import {authenticateToken} from "../controllers/jwt-controller.js";
+import { productPicUpload } from "../controllers/ProductImageController.js";
+import { authenticateToken } from "../controllers/jwt-controller.js";
 
 const router = express.Router();
 
@@ -18,6 +19,7 @@ router.post(
     addNewProduct
 );
 router.get("/get-all/:id", authenticateToken, getAllProduct);
+router.get("/get-length", authenticateToken, getTotalProductLength);
 router.get("/get-product/:id", authenticateToken, getProductDetail);
 router.post(
     "/edit-product/:id",
