@@ -140,7 +140,7 @@ export const resturantRegister = async (req, res) => {
                         <tr>
                           <td align="center">
                             <a
-                              href="http://localhost:3000/verify?token=${verificationToken}"
+                              href="${process.env.LIVE_SITE_URL}/verify?token=${verificationToken}"
                               target="_blank"
                               style="
                                 background-color: #f87171;
