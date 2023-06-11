@@ -257,10 +257,9 @@ export const resturantEdit = async (req, res) => {
       return res.status(404).send({ error: "Resturant not found" });
     }
 
-    const { name, email, city, address, password, phone, isUser } = req.body;
+    let { name, email, city, address, password, phone, isUser, current_password } = req.body;
     const profilePath = req.file ? req.file.path : resturant?.profilePath;
     const profilePic = req.file ? req.file.filename : resturant?.profilePic;
-
     if (req.file) {
       const filePath = path.join(resturant?.profilePath);
       fs.unlink(filePath, (err) => {
@@ -271,7 +270,19 @@ export const resturantEdit = async (req, res) => {
       });
     }
 
-    const updatedResturant = await Product.findByIdAndUpdate(
+    if (current_password) {
+      const match = await bcrypt.compare(
+        req.body.current_password,
+        resturant.password
+      );
+      if (!match) {
+        return res.status(500).send({ error: "Current password is wrong" });
+      }
+    }
+    const salt = await bcrypt.genSalt(10);
+    password = await bcrypt.hash(password, salt);
+
+    const updatedResturant = await Resturant.findByIdAndUpdate(
       id,
       {
         name,
@@ -287,7 +298,7 @@ export const resturantEdit = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).send({ message: updatedResturant });
+    res.status(200).send({ data: updatedResturant, message : 'Resturant update successfully' });
   } catch (error) {
     res.status(500).send({ error: "Failed to update resturant" });
   }

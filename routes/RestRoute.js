@@ -3,7 +3,8 @@ import {
     resturantLogin,
     resturantRegister,
     resturantEmailVerification,
-    getresturantDetail
+    getresturantDetail,
+    resturantEdit
 } from "../controllers/ResturantController.js";
 import { restProfileUpload } from "../controllers/ImageController.js";
 import { authenticateToken } from "../controllers/jwt-controller.js";
@@ -22,6 +23,8 @@ router.get(
 );
 router.post("/rest-login", resturantLogin);
 
-router.get("/get-resturant/:id", authenticateToken, getresturantDetail)
+router.get("/get-resturant/:id", authenticateToken, getresturantDetail);
+
+router.post("/rest-edit/:id", authenticateToken,restProfileUpload.single("profilePic"), resturantEdit)
 
 export default router;
