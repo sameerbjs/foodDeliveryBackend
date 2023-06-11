@@ -278,9 +278,9 @@ export const resturantEdit = async (req, res) => {
       if (!match) {
         return res.status(500).send({ error: "Current password is wrong" });
       }
+      const salt = await bcrypt.genSalt(10);
+      password = await bcrypt.hash(password, salt);
     }
-    const salt = await bcrypt.genSalt(10);
-    password = await bcrypt.hash(password, salt);
 
     const updatedResturant = await Resturant.findByIdAndUpdate(
       id,
