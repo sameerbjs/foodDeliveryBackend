@@ -35,6 +35,7 @@ export const resturantRegister = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const verificationToken = generateVerificationToken()
+    const verificationUrl = `${process.env.LIVE_SITE_URL}/verify-rest?token=${verificationToken}`
     const rest = new Resturant({
       name: name,
       email: email,
@@ -46,6 +47,7 @@ export const resturantRegister = async (req, res) => {
       profilePic: req.file.filename,
       profilePath: req.file.path,
       verificationToken: verificationToken,
+      verificationUrl: verificationUrl,
       isVerified: false
     });
 
@@ -140,7 +142,7 @@ export const resturantRegister = async (req, res) => {
                         <tr>
                           <td align="center">
                             <a
-                              href="${process.env.LIVE_SITE_URL}/verify?token=${verificationToken}"
+                              href="${process.env.LIVE_SITE_URL}/verify-rest?token=${verificationToken}"
                               target="_blank"
                               style="
                                 background-color: #f87171;
@@ -204,6 +206,7 @@ export const resturantEmailVerification = async (req, res) => {
     // Update the user record to mark them as verified
     rest.isVerified = true;
     rest.verificationToken = null;
+    rest.verificationUrl = null
     await rest.save();
 
     res.status(200).send({ message: 'Email verified successfully you can login now' });
@@ -228,6 +231,7 @@ export const resturantLogin = async (req, res) => {
         isUser: restFind.isUser,
         profilePic: restFind.profilePic,
         profilePath: restFind.profilePath,
+        verificationUrl : restFind.verificationUrl,
         isVerified: restFind.isVerified,
         token: generateToken(restFind._id),
       });
@@ -298,7 +302,16 @@ export const resturantEdit = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).send({ data: updatedResturant, message : 'Resturant update successfully' });
+    res.status(200).send({
+      _id: updatedResturant._id,
+      name: updatedResturant.name,
+      email: updatedResturant.email,
+      isUser: updatedResturant.isUser,
+      profilePic: updatedResturant.profilePic,
+      profilePath: updatedResturant.profilePath,
+      isVerified: updatedResturant.isVerified,
+      token: generateToken(updatedResturant._id),
+    });
   } catch (error) {
     res.status(500).send({ error: "Failed to update resturant" });
   }

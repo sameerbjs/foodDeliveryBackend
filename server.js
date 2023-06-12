@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import resturantRoute from "./routes/RestRoute.js";
 import productRoute from "./routes/ProductRoute.js";
+import userRoute from "./routes/UserRoute.js";
 
 const app = express();
 dotenv.config();
@@ -18,6 +19,9 @@ app.use("/api", resturantRoute);
 
 // products
 app.use("/api", productRoute);
+
+// users
+app.use("/api", userRoute)
 
 const PORT = process.env.SERVER_PORT || 8000;
 app.listen(PORT, () => {

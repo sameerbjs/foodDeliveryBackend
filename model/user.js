@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const restScheme = mongoose.Schema(
+const userScheme = mongoose.Schema(
     {
         name: {
             type: String,
@@ -14,15 +14,11 @@ const restScheme = mongoose.Schema(
             type: String,
             required: true,
         },
-        phone: {
-            type: String,
-            required: true,
-        },
-        city: {
-            type: String,
-        },
         address: {
             type: String,
+        },
+        dob: {
+            type: Date,
         },
         profilePic: {
             type: String,
@@ -48,6 +44,6 @@ const restScheme = mongoose.Schema(
     },
     { timestamps: true }
 );
-const rest = mongoose.model("resturants", restScheme);
+const user = mongoose.model("users", userScheme);
 
-export default rest;
+export default user;
