@@ -38,15 +38,22 @@ export const getProductDetail = async (req, res) => {
 };
 
 export const getAllProduct = async (req, res) => {
-    const { page, limit } = req.query;
+    const { page, limit, category } = req.query;
     const skip = (page - 1) * limit;
     const { id } = req.params;
-
+    let products;
     try {
-        const products = await Product.find({ rest_id: id })
-            .skip(skip)
-            .limit(parseInt(limit))
-            .exec();
+        if (category) {
+            products = await Product.find({ rest_id: id, category: category })
+                .skip(skip)
+                .limit(parseInt(limit))
+                .exec();
+        } else {
+            products = await Product.find({ rest_id: id })
+                .skip(skip)
+                .limit(parseInt(limit))
+                .exec();
+        }
 
         return res.status(200).send({ products: products });
     } catch (error) {
@@ -57,12 +64,12 @@ export const getAllProduct = async (req, res) => {
 
 export const getTotalProductLength = async (req, res) => {
     try {
-      // Count the total number of items in the collection
-      const totalItems = await Product.countDocuments();
-  
-      res.status(200).send({ message : totalItems });
+        // Count the total number of items in the collection
+        const totalItems = await Product.countDocuments();
+
+        res.status(200).send({ message: totalItems });
     } catch (error) {
-      res.status(500).send({ error: 'Failed to get total items' });
+        res.status(500).send({ error: 'Failed to get total items' });
     }
 };
 

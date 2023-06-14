@@ -5,7 +5,6 @@ import path from "path";
 import { generateToken, generateVerificationToken } from "../helper/token.js";
 import nodemailer from 'nodemailer';
 
-
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
@@ -316,5 +315,17 @@ export const resturantEdit = async (req, res) => {
     res.status(200).send({ finalData });
   } catch (error) {
     res.status(500).send({ error: "Failed to update resturant" });
+  }
+}
+
+export const getResturantsByCity = async (req, res) => {
+
+  try {
+    const { city } = req.params
+
+    const resturants = await Resturant.find({city:city}).select("-password");
+    res.status(200).send({resturants : resturants});
+  } catch (error) {
+    res.status(404).send({error : 'Resturant not found'});
   }
 }

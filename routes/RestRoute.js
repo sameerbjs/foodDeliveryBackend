@@ -4,7 +4,8 @@ import {
     resturantRegister,
     resturantEmailVerification,
     getresturantDetail,
-    resturantEdit
+    resturantEdit,
+    getResturantsByCity
 } from "../controllers/ResturantController.js";
 import { restProfileUpload } from "../controllers/ImageController.js";
 import { authenticateToken } from "../controllers/jwt-controller.js";
@@ -25,6 +26,8 @@ router.post("/rest-login", resturantLogin);
 
 router.get("/get-resturant/:id", authenticateToken, getresturantDetail);
 
-router.post("/rest-edit/:id", authenticateToken,restProfileUpload.single("profilePic"), resturantEdit)
+router.post("/rest-edit/:id", authenticateToken,restProfileUpload.single("profilePic"), resturantEdit);
+
+router.get("/get-rest-city/:city", authenticateToken, getResturantsByCity);
 
 export default router;

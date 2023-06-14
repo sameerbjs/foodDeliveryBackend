@@ -5,6 +5,7 @@ import cors from "cors";
 import resturantRoute from "./routes/RestRoute.js";
 import productRoute from "./routes/ProductRoute.js";
 import userRoute from "./routes/UserRoute.js";
+import ratingRoute from "./routes/RatingRoute.js"
 
 const app = express();
 dotenv.config();
@@ -22,6 +23,9 @@ app.use("/api", productRoute);
 
 // users
 app.use("/api", userRoute)
+
+// ratings
+app.use("/api", ratingRoute)
 
 const PORT = process.env.SERVER_PORT || 8000;
 app.listen(PORT, () => {
