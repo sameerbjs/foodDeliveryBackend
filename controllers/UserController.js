@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const userRegister = async (req, res) => {
-    const { name, email, address, password, isUser } = req.body;
+    const { name, email, address, password, isUser,dob } = req.body;
 
     const chkExsit = await User.findOne({ email });
     const filePath = path.join(req.file.path);
@@ -43,6 +43,7 @@ export const userRegister = async (req, res) => {
             isUser: isUser,
             password: hashedPassword,
             profilePic: req.file.filename,
+            dob : dob,
             profilePath: req.file.path,
             verificationToken: verificationToken,
             verificationUrl: verificationUrl,
@@ -228,6 +229,7 @@ export const userLogin = async (req, res) => {
                 email: user.email,
                 isUser: user.isUser,
                 profilePic: user.profilePic,
+                dob : user.dob,
                 profilePath: user.profilePath,
                 isVerified: user.isVerified,
                 verificationUrl: user.verificationUrl,
@@ -240,3 +242,80 @@ export const userLogin = async (req, res) => {
         return res.status(400).send({ error: "User dose not exsist" });
     }
 };
+
+export const getUserDetail = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        return res.status(200).send(user);
+    } catch (error) {
+        return res.status(500).send({ error: error.message });
+    }
+};
+
+export const userEdit = async (req, res) => {
+
+    try {
+      const { id } = req.params;
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).send({ error: "User not found" });
+      }
+  
+      let { name, email, address, dob, password, isUser, current_password } = req.body;
+      const profilePath = req.file ? req.file.path : user?.profilePath;
+      const profilePic = req.file ? req.file.filename : user?.profilePic;
+      if (req.file) {
+        const filePath = path.join(user?.profilePath);
+        fs.unlink(filePath, (err) => {
+          if (err)
+            return res.status(400).send({
+              error: "File cannot be deleted user resturant",
+            });
+        });
+      }
+  
+      if (current_password) {
+        const match = await bcrypt.compare(
+          req.body.current_password,
+          user.password
+        );
+        if (!match) {
+          return res.status(500).send({ error: "Current password is wrong" });
+        }
+        const salt = await bcrypt.genSalt(10);
+        password = await bcrypt.hash(password, salt);
+      }
+  
+      const updatedUser = await User.findByIdAndUpdate(
+        id,
+        {
+          name,
+          email,
+          address,
+          password,
+          dob,
+          isUser,
+          profilePath,
+          profilePic
+        },
+        { new: true }
+      );
+  
+      const finalData = {
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        address : updatedUser.address,
+        isUser: updatedUser.isUser,
+        dob : updatedUser.dob,
+        profilePic: updatedUser.profilePic,
+        profilePath: updatedUser.profilePath,
+        isVerified: updatedUser.isVerified,
+        token: generateToken(updatedUser._id),
+      }
+  
+      res.status(200).send({ finalData });
+    } catch (error) {
+      res.status(500).send({ error: "Failed to update user" });
+    }
+  }

@@ -18,7 +18,7 @@ const userScheme = mongoose.Schema(
             type: String,
         },
         dob: {
-            type: Date,
+            type: String,
         },
         profilePic: {
             type: String,

@@ -231,7 +231,7 @@ export const resturantLogin = async (req, res) => {
         isUser: restFind.isUser,
         profilePic: restFind.profilePic,
         profilePath: restFind.profilePath,
-        verificationUrl : restFind.verificationUrl,
+        verificationUrl: restFind.verificationUrl,
         isVerified: restFind.isVerified,
         token: generateToken(restFind._id),
       });
@@ -302,7 +302,7 @@ export const resturantEdit = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).send({
+    const finalData = {
       _id: updatedResturant._id,
       name: updatedResturant.name,
       email: updatedResturant.email,
@@ -311,7 +311,9 @@ export const resturantEdit = async (req, res) => {
       profilePath: updatedResturant.profilePath,
       isVerified: updatedResturant.isVerified,
       token: generateToken(updatedResturant._id),
-    });
+    }
+
+    res.status(200).send({ finalData });
   } catch (error) {
     res.status(500).send({ error: "Failed to update resturant" });
   }

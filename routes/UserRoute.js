@@ -1,7 +1,7 @@
 import express from "express";
 import { userProfileImage } from "../controllers/UserImageController.js";
-import { UserEmailVerification, userLogin, userRegister } from "../controllers/UserController.js";
-// import { authenticateToken } from "../controllers/jwt-controller.js";
+import { UserEmailVerification, getUserDetail, userEdit, userLogin, userRegister } from "../controllers/UserController.js";
+import { authenticateToken } from "../controllers/jwt-controller.js";
 
 
 const router = express.Router();
@@ -17,5 +17,10 @@ router.get(
     UserEmailVerification
 );
 router.post("/user-login", userLogin);
+
+router.get("/get-user/:id", authenticateToken, getUserDetail);
+
+router.post("/user-edit/:id", authenticateToken,userProfileImage.single("profilePic"), userEdit);
+
 
 export default router;
