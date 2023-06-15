@@ -43,11 +43,14 @@ const restScheme = mongoose.Schema(
         },
         isVerified: {
             type: Boolean,
-        }
-
+        },
+        ratings: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Rating',
+        }],
     },
     { timestamps: true }
 );
-const rest = mongoose.model("resturants", restScheme);
+const Resturant = mongoose.model("Resturant", restScheme);
 
-export default rest;
+export default Resturant;

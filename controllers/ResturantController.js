@@ -323,9 +323,10 @@ export const getResturantsByCity = async (req, res) => {
   try {
     const { city } = req.params
 
-    const resturants = await Resturant.find({city:city}).select("-password");
-    res.status(200).send({resturants : resturants});
+    const resturants = await Resturant.find({city:city}).populate('ratings');
+    res.status(200).send({resturants});
   } catch (error) {
+    console.log(error)
     res.status(404).send({error : 'Resturant not found'});
   }
 }
