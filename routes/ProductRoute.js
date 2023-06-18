@@ -19,7 +19,7 @@ router.post(
     addNewProduct
 );
 router.get("/get-all/:id", authenticateToken, getAllProduct);
-router.get("/get-length", authenticateToken, getTotalProductLength);
+router.get("/get-length/:id", authenticateToken, getTotalProductLength);
 router.get("/get-product/:id", authenticateToken, getProductDetail);
 router.post(
     "/edit-product/:id",

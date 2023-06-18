@@ -11,6 +11,7 @@ export const addNewProduct = async (req, res) => {
             title: title,
             price: price,
             category: category,
+            quantity : 1,
             description: description,
             productPic: req.file.filename,
             productPath: req.file.path,
@@ -64,8 +65,9 @@ export const getAllProduct = async (req, res) => {
 
 export const getTotalProductLength = async (req, res) => {
     try {
+        const { id } = req.params.id
         // Count the total number of items in the collection
-        const totalItems = await Product.countDocuments();
+        const totalItems = await Product.find({ id: id }).countDocuments();
 
         res.status(200).send({ message: totalItems });
     } catch (error) {

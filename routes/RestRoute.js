@@ -28,6 +28,6 @@ router.get("/get-resturant/:id", authenticateToken, getresturantDetail);
 
 router.post("/rest-edit/:id", authenticateToken,restProfileUpload.single("profilePic"), resturantEdit);
 
-router.get("/get-rest-city/:city", authenticateToken, getResturantsByCity);
+router.get("/get-rest-city/:city", getResturantsByCity);
 
 export default router;
