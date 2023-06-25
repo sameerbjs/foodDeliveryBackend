@@ -10,13 +10,19 @@ const productScheme = mongoose.Schema(
             required: true,
         },
         price: {
-            type: String,
+            type: Number,
         },
         category: {
             type: String,
         },
+        size: {
+            type: String
+        },
         quantity: {
             type: Number,
+        },
+        size: {
+            type: String,
         },
         productPic: {
             type: String,
@@ -28,7 +34,7 @@ const productScheme = mongoose.Schema(
             type: String,
         },
     },
-    {timestamps: true}
+    { timestamps: true }
 );
 
 const Product = mongoose.model("Product", productScheme);

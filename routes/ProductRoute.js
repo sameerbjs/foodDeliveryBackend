@@ -5,7 +5,6 @@ import {
     getAllProduct,
     editProduct,
     deleteProduct,
-    getTotalProductLength
 } from "../controllers/ProductController.js";
 import { productPicUpload } from "../controllers/ProductImageController.js";
 import { authenticateToken } from "../controllers/jwt-controller.js";
@@ -19,7 +18,6 @@ router.post(
     addNewProduct
 );
 router.get("/get-all/:id", authenticateToken, getAllProduct);
-router.get("/get-length/:id", authenticateToken, getTotalProductLength);
 router.get("/get-product/:id", authenticateToken, getProductDetail);
 router.post(
     "/edit-product/:id",

@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 
 export const addNewProduct = async (req, res) => {
-    const { title, price, category, description, rest_id } = req.body;
+    const { title, price, category, description, rest_id,size } = req.body;
 
     try {
         const product = await Product.create({
@@ -11,7 +11,8 @@ export const addNewProduct = async (req, res) => {
             title: title,
             price: price,
             category: category,
-            quantity : 1,
+            quantity: 1,
+            size: size,
             description: description,
             productPic: req.file.filename,
             productPath: req.file.path,
@@ -62,19 +63,6 @@ export const getAllProduct = async (req, res) => {
     }
 };
 
-
-export const getTotalProductLength = async (req, res) => {
-    try {
-        const { id } = req.params.id
-        // Count the total number of items in the collection
-        const totalItems = await Product.find({ id: id }).countDocuments();
-
-        res.status(200).send({ message: totalItems });
-    } catch (error) {
-        res.status(500).send({ error: 'Failed to get total items' });
-    }
-};
-
 export const editProduct = async (req, res) => {
     try {
         const { id } = req.params;
@@ -82,7 +70,7 @@ export const editProduct = async (req, res) => {
         if (!product) {
             return res.status(404).send({ error: "Product not found" });
         }
-        const { title, description, price, category } = req.body;
+        const { title, description, price, category,size } = req.body;
         const productPath = req.file ? req.file.path : product?.productPath;
         const productPic = req.file ? req.file.filename : product?.productPic;
 
@@ -106,6 +94,7 @@ export const editProduct = async (req, res) => {
                 price,
                 productPath,
                 productPic,
+                size
             },
             { new: true }
         );
