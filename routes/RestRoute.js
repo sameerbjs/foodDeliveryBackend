@@ -7,7 +7,6 @@ import {
     resturantEdit,
     getResturantsByCity
 } from "../controllers/ResturantController.js";
-import { restProfileUpload } from "../controllers/ImageController.js";
 import { authenticateToken } from "../controllers/jwt-controller.js";
 
 
@@ -15,7 +14,6 @@ const router = express.Router();
 
 router.post(
     "/rest-register",
-    restProfileUpload.single("profilePic"),
     resturantRegister
 );
 router.get(
@@ -26,7 +24,7 @@ router.post("/rest-login", resturantLogin);
 
 router.get("/get-resturant/:id", authenticateToken, getresturantDetail);
 
-router.post("/rest-edit/:id", authenticateToken,restProfileUpload.single("profilePic"), resturantEdit);
+router.post("/rest-edit/:id", authenticateToken, resturantEdit);
 
 router.get("/get-rest-city/:city", getResturantsByCity);
 

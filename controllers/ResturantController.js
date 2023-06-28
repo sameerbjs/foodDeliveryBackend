@@ -1,7 +1,5 @@
 import Resturant from "../model/resturant.js";
 import bcrypt from "bcrypt";
-import fs from "fs";
-import path from "path";
 import { generateToken, generateVerificationToken } from "../helper/token.js";
 import nodemailer from 'nodemailer';
 
@@ -14,22 +12,14 @@ const transporter = nodemailer.createTransport({
 });
 
 export const resturantRegister = async (req, res) => {
-  const { name, email, city, address, password, phone, isUser } = req.body;
+  const { name, email, city, address, password, phone, isUser, profilePic} = req.body;
 
   const chkExsit = await Resturant.findOne({ email });
-  const filePath = path.join(req.file.path);
   if (chkExsit) {
-    fs.unlink(filePath, (err) => {
-      if (err)
-        return res.status(400).send({
-          error: "File cannot be deleted chkExsist",
-        });
-    });
     return res
       .status(400)
       .send({ error: "Resturant already registered with this email" });
   }
-
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -43,8 +33,7 @@ export const resturantRegister = async (req, res) => {
       isUser: isUser,
       phone: phone,
       password: hashedPassword,
-      profilePic: req.file.filename,
-      profilePath: req.file.path,
+      profilePic: profilePic,
       verificationToken: verificationToken,
       verificationUrl: verificationUrl,
       isVerified: false
@@ -260,18 +249,7 @@ export const resturantEdit = async (req, res) => {
       return res.status(404).send({ error: "Resturant not found" });
     }
 
-    let { name, email, city, address, password, phone, isUser, current_password } = req.body;
-    const profilePath = req.file ? req.file.path : resturant?.profilePath;
-    const profilePic = req.file ? req.file.filename : resturant?.profilePic;
-    if (req.file) {
-      const filePath = path.join(resturant?.profilePath);
-      fs.unlink(filePath, (err) => {
-        if (err)
-          return res.status(400).send({
-            error: "File cannot be deleted edit resturant",
-          });
-      });
-    }
+    let { name, email, city, address, password, phone, isUser, current_password,profilePic } = req.body;
 
     if (current_password) {
       const match = await bcrypt.compare(
@@ -292,11 +270,10 @@ export const resturantEdit = async (req, res) => {
         email,
         city,
         address,
+        profilePic,
         password,
         phone,
         isUser,
-        profilePath,
-        profilePic
       },
       { new: true }
     );
@@ -307,7 +284,6 @@ export const resturantEdit = async (req, res) => {
       email: updatedResturant.email,
       isUser: updatedResturant.isUser,
       profilePic: updatedResturant.profilePic,
-      profilePath: updatedResturant.profilePath,
       isVerified: updatedResturant.isVerified,
       token: generateToken(updatedResturant._id),
     }

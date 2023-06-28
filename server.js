@@ -8,6 +8,7 @@ import userRoute from "./routes/UserRoute.js";
 import ratingRoute from "./routes/RatingRoute.js"
 import orderRoute from "./routes/OrderRoute.js"
 import lenghtRoute from "./routes/ItemLenghtRoute.js"
+import imageRoute from "./routes/ImageRoute.js"
 
 const app = express();
 dotenv.config();
@@ -16,10 +17,13 @@ app.use(express.json());
 
 // test
 
-app.get('/test', (req,res) => res.status(200).send({message : 'Welcome to our website'}))
+app.get('/test', (req, res) => res.status(200).send({ message: 'Welcome to our website' }))
 
 // image access
 app.use("/uploads", express.static("uploads"));
+
+// image uploads
+app.use("/api", imageRoute);
 
 // resturant
 app.use("/api", resturantRoute);
