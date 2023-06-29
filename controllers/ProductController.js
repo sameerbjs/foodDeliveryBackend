@@ -1,9 +1,19 @@
 import Product from "../model/products.js";
-import fs from "fs";
-import path from "path";
+import mongoose from 'mongoose';
+import grid from "gridfs-stream";
+
+let gfs, gridfsBucket;
+const conn = mongoose.connection;
+conn.once("open", () => {
+    gridfsBucket = new mongoose.mongo.GridFSBucket(conn.db, {
+        bucketName: "uploads",
+    });
+    gfs = grid(conn.db, mongoose.mongo);
+    gfs.collection("uploads");
+});
 
 export const addNewProduct = async (req, res) => {
-    const { title, price, category, description, rest_id,size } = req.body;
+    const { title, price, category, description, rest_id, size, productPic } = req.body;
 
     try {
         const product = await Product.create({
@@ -14,8 +24,7 @@ export const addNewProduct = async (req, res) => {
             quantity: 1,
             size: size,
             description: description,
-            productPic: req.file.filename,
-            productPath: req.file.path,
+            productPic: productPic,
         });
 
         if (product) {
@@ -26,7 +35,7 @@ export const addNewProduct = async (req, res) => {
             return res.status(400).send({ error: "Product not added" });
         }
     } catch (error) {
-        return res.status(400).send({ error: error });
+        return res.status(400).send({ error: error.message });
     }
 };
 
@@ -70,20 +79,18 @@ export const editProduct = async (req, res) => {
         if (!product) {
             return res.status(404).send({ error: "Product not found" });
         }
-        const { title, description, price, category,size } = req.body;
-        const productPath = req.file ? req.file.path : product?.productPath;
-        const productPic = req.file ? req.file.filename : product?.productPic;
+        const { title, description, price, category, size, productPic } = req.body;
 
-        if (req.file) {
-            const filePath = path.join(product?.productPath);
-            fs.unlink(filePath, (err) => {
-                if (err)
-                    return res.status(400).send({
-                        error: "File cannot be deleted edit product",
-                    });
+        if(product.productPic !== productPic){
+            const productDel = product.productPic.split('/')[5];
+            const file = await gfs.files.findOne({
+                filename: productDel,
             });
+            if (!file) {
+                return res.status(404).send('No file found');
+            }
+            gridfsBucket.delete(file._id);
         }
-
         // Update product in the database
         const updatedProduct = await Product.findByIdAndUpdate(
             id,
@@ -92,7 +99,6 @@ export const editProduct = async (req, res) => {
                 description,
                 category,
                 price,
-                productPath,
                 productPic,
                 size
             },
@@ -112,16 +118,15 @@ export const deleteProduct = async (req, res) => {
     if (!product) {
         return res.status(404).send({ error: "Product not found" });
     }
-
-    const filePath = path.join(product?.productPath);
-    fs.unlink(filePath, (err) => {
-        if (err)
-            return res.status(400).send({
-                error: "File cannot be deleted in delete product",
-            });
+    const productDel = product.productPic.split('/')[5];
+    const file = await gfs.files.findOne({
+        filename: productDel,
     });
-
+    if (!file) {
+        return res.status(404).send('No file found');
+    }
     try {
+        gridfsBucket.delete(file._id);
         await Product.findByIdAndDelete(id);
         return res.status(200).send({ message: "Product deleted successfully" });
     } catch (error) {

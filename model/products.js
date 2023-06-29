@@ -27,9 +27,6 @@ const productScheme = mongoose.Schema(
         productPic: {
             type: String,
         },
-        productPath: {
-            type: String,
-        },
         description: {
             type: String,
         },
