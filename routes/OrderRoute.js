@@ -1,12 +1,14 @@
 import express from "express";
 import { authenticateToken } from "../controllers/jwt-controller.js";
-import { changeOrderStatus, getOrderDetail, getResturantAllOrders, placeOrder } from "../controllers/OrderController.js";
+import { changeOrderStatus, getOrderById, getOrderDetail, getResturantAllOrders, getUserAllOrders, placeOrder } from "../controllers/OrderController.js";
 
 const router = express.Router();
 
-router.post("/place-order", placeOrder);
-router.get("/get-order/:id", getResturantAllOrders);
-router.get("/get-order-detail/:id", getOrderDetail);
-router.post("/order-status/:id", changeOrderStatus);
+router.post("/place-order", authenticateToken, placeOrder);
+router.get("/get-order/:id", authenticateToken, getResturantAllOrders);
+router.get("/get-order-detail/:id", authenticateToken, getOrderDetail);
+router.post("/order-status/:id", authenticateToken, changeOrderStatus);
+router.get("/order",authenticateToken, getOrderById);
+router.get("/get-user-order/:id", getUserAllOrders);
 
 export default router;

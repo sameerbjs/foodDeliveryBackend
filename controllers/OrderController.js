@@ -101,3 +101,40 @@ export const changeOrderStatus = async (req, res) => {
         res.status(400).send({ error: error })
     }
 }
+
+export const getOrderById = async (req, res) => {
+    const { rest_id, search, status } = req.query;
+    try {
+        const filter = {
+            $expr: {
+                $regexMatch: {
+                    input: { $toString: '$_id' },
+                    regex: search,
+                    options: 'i',
+                },
+            },
+        };
+
+        if (status) {
+            filter.status = status;
+        }
+
+        const orders = await Order.find(filter).populate({ path: "products.product", match: { rest_id: rest_id } });
+        res.status(200).json({ orders });
+    } catch (error) {
+        res.status(500).json({ error: 'Interval server error', err: error.message });
+    }
+};
+
+export const getUserAllOrders = async (req, res) => {
+    const { status } = req.query;
+    const { id } = req.params;
+    let orders;
+    if (status) {
+        orders = await Order.find({ user: id, status: status }).populate("products.product");
+        res.status(200).send({ orders })
+    } else {
+        orders = await Order.find({ user: id }).populate("products.product");
+        res.status(200).send({ orders })
+    }
+}
