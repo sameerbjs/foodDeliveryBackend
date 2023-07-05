@@ -1,6 +1,7 @@
 import Product from "../model/products.js";
 import mongoose from 'mongoose';
 import grid from "gridfs-stream";
+import Resturant from "../model/resturant.js";
 
 let gfs, gridfsBucket;
 const conn = mongoose.connection;
@@ -65,7 +66,6 @@ export const getAllProduct = async (req, res) => {
                 .limit(parseInt(limit))
                 .exec();
         }
-
         return res.status(200).send({ products: products });
     } catch (error) {
         return res.status(500).send({ error: error.message });
@@ -81,7 +81,7 @@ export const editProduct = async (req, res) => {
         }
         const { title, description, price, category, size, productPic } = req.body;
 
-        if(product.productPic !== productPic){
+        if (product.productPic !== productPic) {
             const productDel = product.productPic.split('/')[5];
             const file = await gfs.files.findOne({
                 filename: productDel,

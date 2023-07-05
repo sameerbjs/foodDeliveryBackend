@@ -9,6 +9,7 @@ import ratingRoute from "./routes/RatingRoute.js"
 import orderRoute from "./routes/OrderRoute.js"
 import lenghtRoute from "./routes/ItemLenghtRoute.js"
 import imageRoute from "./routes/ImageRoute.js"
+import categoryRoute from "./routes/CategoryRoute.js"
 
 const app = express();
 dotenv.config();
@@ -39,6 +40,9 @@ app.use("/api", ratingRoute);
 
 // orders
 app.use("/api", orderRoute);
+
+// categories
+app.use("/api", categoryRoute);
 
 // items length
 app.use("/api", lenghtRoute);

@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const resturantRegister = async (req, res) => {
-  const { name, email, city, address, password, phone, isUser, profilePic} = req.body;
+  const { name, email, city, address, password, phone, isUser, profilePic } = req.body;
 
   const chkExsit = await Resturant.findOne({ email });
   if (chkExsit) {
@@ -249,7 +249,7 @@ export const resturantEdit = async (req, res) => {
       return res.status(404).send({ error: "Resturant not found" });
     }
 
-    let { name, email, city, address, password, phone, isUser, current_password,profilePic } = req.body;
+    let { name, email, city, address, password, phone, isUser, current_password, profilePic } = req.body;
 
     if (current_password) {
       const match = await bcrypt.compare(
@@ -299,10 +299,10 @@ export const getResturantsByCity = async (req, res) => {
   try {
     const { city } = req.params
 
-    const resturants = await Resturant.find({city:city}).populate('ratings');
-    res.status(200).send({resturants});
+    const resturants = await Resturant.find({ city: city }).populate('ratings').populate('categories');
+    res.status(200).send({ resturants });
   } catch (error) {
     console.log(error)
-    res.status(404).send({error : 'Resturant not found'});
+    res.status(404).send({ error: 'Resturant not found' });
   }
 }

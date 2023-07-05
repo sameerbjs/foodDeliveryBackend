@@ -45,6 +45,10 @@ const restScheme = mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Rating',
         }],
+        categories: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Category',
+        }]
     },
     { timestamps: true }
 );

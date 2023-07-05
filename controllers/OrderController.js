@@ -52,17 +52,18 @@ export const placeOrder = async (req, res) => {
 export const getResturantAllOrders = async (req, res) => {
     const { status } = req.query;
     const { id } = req.params;
+
     let orders;
     if (status) {
         orders = await Order.find({ status: status }).populate({
             path: "products.product",
-            match: { rest_id: id },
+            match : {rest_id : id}
         });
         res.status(200).send({ orders })
     } else {
         orders = await Order.find({}).populate({
             path: "products.product",
-            match: { rest_id: id },
+            match : {rest_id : id}
         });
         res.status(200).send({ orders })
     }

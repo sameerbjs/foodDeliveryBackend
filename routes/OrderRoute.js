@@ -8,7 +8,7 @@ router.post("/place-order", authenticateToken, placeOrder);
 router.get("/get-order/:id", authenticateToken, getResturantAllOrders);
 router.get("/get-order-detail/:id", authenticateToken, getOrderDetail);
 router.post("/order-status/:id", authenticateToken, changeOrderStatus);
-router.get("/order",authenticateToken, getOrderById);
-router.get("/get-user-order/:id", getUserAllOrders);
+router.get("/order", authenticateToken, getOrderById);
+router.get("/get-user-order/:id", authenticateToken, getUserAllOrders);
 
 export default router;
