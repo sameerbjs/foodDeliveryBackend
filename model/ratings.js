@@ -3,11 +3,9 @@ import mongoose from "mongoose";
 const ratingSchema = new mongoose.Schema({
     rating: {
         type: Number,
-        required: true,
     },
     comment: {
         type: String,
-        required: true,
     },
     resturant: {
         type: mongoose.Schema.Types.ObjectId,

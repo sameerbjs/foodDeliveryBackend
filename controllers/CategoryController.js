@@ -1,4 +1,5 @@
 import Category from "../model/category.js";
+import Product from "../model/products.js";
 import Resturant from "../model/resturant.js";
 
 export const addCategory = async (req, res) => {
@@ -11,7 +12,7 @@ export const addCategory = async (req, res) => {
             resturant: rest_id,
         });
         let savedCategory = await category.save();
-        
+
         const restaurant = await Resturant.findById(rest_id);
         restaurant.categories.push(category._id);
         await restaurant.save();
@@ -35,9 +36,26 @@ export const getCategory = async (req, res) => {
 
 export const deleteCategory = async (req, res) => {
     try {
-        await Category.findByIdAndDelete(req.params.id);
-        return res.status(200).send({ message: "Category deleted successfully" });
+        const { id } = req.params;
+        const category = await Category.findOne({ _id: id });
+
+        if (category) {
+            const categoryName = category.name;
+
+            // Delete related products
+            const products = await Product.find({ category: categoryName });
+            if (products.length > 0) {
+                await Product.deleteMany({ category: categoryName });
+            }
+
+            // Delete the category
+            await Category.findByIdAndDelete(id);
+
+            return res.status(200).send({ message: "Category and related products deleted successfully" });
+        } else {
+            return res.status(404).send({ message: "Category not found" });
+        }
     } catch (error) {
         return res.status(500).send({ error: error.message });
     }
-}
+};
