@@ -16,7 +16,7 @@ export const postRating = async (req, res) => {
 
         // Save the rating to the database
         let savedRating = await newRating.save();
-        savedRating.populate('user','name');
+        savedRating.populate('user','name profilePic');
         // Find the corresponding restaurant and update its ratings array
         const restaurant = await Resturant.findById(resturant);
         restaurant.ratings.push(savedRating._id);
