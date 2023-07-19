@@ -29,6 +29,6 @@ router.post("/rest-edit/:id", authenticateToken, resturantEdit);
 
 router.get("/get-rest-city/:city", getResturantsByCity);
 
-router.get("/search-rest", authenticateToken, searchResturant);
+router.get("/search-rest", searchResturant);
 
 export default router;
