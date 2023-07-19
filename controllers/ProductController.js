@@ -1,7 +1,6 @@
 import Product from "../model/products.js";
 import mongoose from 'mongoose';
 import grid from "gridfs-stream";
-import Resturant from "../model/resturant.js";
 
 let gfs, gridfsBucket;
 const conn = mongoose.connection;

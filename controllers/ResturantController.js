@@ -7,7 +7,7 @@ const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
     user: 'sabirsameer48@gmail.com',
-    pass: 'kdjpepycjjolyyiy',
+    pass: process.env.GMAIL_PASS,
   },
 });
 
@@ -304,5 +304,22 @@ export const getResturantsByCity = async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(404).send({ error: 'Resturant not found' });
+  }
+}
+
+export const searchResturant = async (req, res) => {
+  const { name } = req.query;
+  try {
+    const filter = {
+      name: {
+        $regex: name,
+        $options: 'i',
+      },
+    };
+
+    const resturant = await Resturant.find(filter);
+    res.status(200).json({ resturant });
+  } catch (error) {
+    res.status(500).json({ error: 'Interval server error', err: error.message });
   }
 }
