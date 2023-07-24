@@ -308,13 +308,14 @@ export const getResturantsByCity = async (req, res) => {
 }
 
 export const searchResturant = async (req, res) => {
-  const { name } = req.query;
+  const { name, city } = req.query;
   try {
     const filter = {
       name: {
         $regex: name,
         $options: 'i',
       },
+      city: city
     };
 
     const resturant = await Resturant.find(filter);

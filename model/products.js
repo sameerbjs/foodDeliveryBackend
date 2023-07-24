@@ -30,6 +30,10 @@ const productScheme = mongoose.Schema(
         description: {
             type: String,
         },
+        resturant: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Resturant',
+        }
     },
     { timestamps: true }
 );

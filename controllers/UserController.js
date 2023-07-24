@@ -219,6 +219,7 @@ export const userLogin = async (req, res) => {
         email: user.email,
         isUser: user.isUser,
         profilePic: user.profilePic,
+        address : user.address,
         dob: user.dob,
         profilePath: user.profilePath,
         isVerified: user.isVerified,

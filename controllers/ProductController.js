@@ -23,6 +23,7 @@ export const addNewProduct = async (req, res) => {
             category: category,
             quantity: 1,
             size: size,
+            resturant : rest_id,
             description: description,
             productPic: productPic,
         });
@@ -41,7 +42,7 @@ export const addNewProduct = async (req, res) => {
 
 export const getProductDetail = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        const product = await Product.findById(req.params.id).populate('resturant', 'city address')
         return res.status(200).json(product);
     } catch (error) {
         return res.status(500).json({ error: error.message });

@@ -10,6 +10,7 @@ import orderRoute from "./routes/OrderRoute.js"
 import lenghtRoute from "./routes/ItemLenghtRoute.js"
 import imageRoute from "./routes/ImageRoute.js"
 import categoryRoute from "./routes/CategoryRoute.js"
+import contactRoute  from "./routes/ContactRoute.js"
 
 const app = express();
 dotenv.config();
@@ -46,6 +47,9 @@ app.use("/api", categoryRoute);
 
 // items length
 app.use("/api", lenghtRoute);
+
+// contact us
+app.use("/api",contactRoute)
 
 const PORT = process.env.SERVER_PORT || 8000;
 app.listen(PORT, () => {
