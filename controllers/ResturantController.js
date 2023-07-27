@@ -179,7 +179,7 @@ export const resturantRegister = async (req, res) => {
     res.status(200).send({ message: "Verification Email Sent Please Verify" })
   } catch (error) {
     console.log(error)
-    res.status(200).send({ error: "Resturant dose'nt registered",err:error.message })
+    res.status(200).send({ error: "Resturant dose'nt registered", err: error.message })
   }
 };
 
@@ -300,11 +300,10 @@ export const getResturantsByCity = async (req, res) => {
   try {
     const { city } = req.params
 
-    const resturants = await Resturant.find({ city: city }).populate('ratings').populate('categories');
+    const resturants = await Resturant.find({ city: city, isVerified: true }).populate('ratings').populate('categories');
     res.status(200).send({ resturants });
   } catch (error) {
-    console.log(error)
-    res.status(404).send({ error: 'Resturant not found' });
+    res.status(404).send({ error: 'Resturant not found',err:error.message });
   }
 }
 
