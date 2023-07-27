@@ -7,7 +7,7 @@ const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
     user: 'sabirsameer48@gmail.com',
-    pass: process.env.GMAIL_PASS,
+    pass: 'kdjpepycjjolyyiy',
   },
 });
 
@@ -178,7 +178,8 @@ export const resturantRegister = async (req, res) => {
 
     res.status(200).send({ message: "Verification Email Sent Please Verify" })
   } catch (error) {
-    res.status(200).send({ error: "Resturant dose'nt registered" })
+    console.log(error)
+    res.status(200).send({ error: "Resturant dose'nt registered",err:error.message })
   }
 };
 
